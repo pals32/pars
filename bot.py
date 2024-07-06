@@ -1,14 +1,9 @@
-from cmath import e
 from tkinter import *
-import os
-import subprocess
-import threading
 import json
 import time
 from bs4 import BeautifulSoup
 import requests
 import fake_useragent
-import sys
 import os
 
 root = Tk()
@@ -19,9 +14,16 @@ def get_name():
 def get_salary():
     l4['text']= ent.get()
 
+def owsalT():
+    l6['text'] = "True"
+
+def owsalF():
+    l6['text'] = "False"
+
 def get_vac():
     text = l3.cget('text')
     salar = l4.cget('text')
+    owsal = l6.cget('text')
 
  # try:
  #     int(salar)
@@ -36,7 +38,7 @@ def get_vac():
         if salar != '0':
             def get_links(text):
                 data = requests.get(
-                    url=f"https://hh.ru/search/vacancy?text={text}&ored_clusters=true&salary={salar}&only_with_salary={onwsal}&area=1&page=0",
+                    url=f"https://hh.ru/search/vacancy?text={text}&ored_clusters=true&salary={salar}&only_with_salary={owsal}&area=1&page=0",
                     headers={"user-agent": ua.random}
                 )
                 if data.status_code != 200:
@@ -50,7 +52,7 @@ def get_vac():
                 for page in range(page_count):
                     try:
                         data = requests.get(
-                            url=f"https://hh.ru/search/vacancy?text={text}&ored_clusters=true&area=1&salary={salar}&only_with_salary=true&page={page}",
+                            url=f"https://hh.ru/search/vacancy?text={text}&ored_clusters=true&area=1&salary={salar}&only_with_salary={owsal}&page={page}",
                             headers={"user-agent": ua.random}
                         )
                         if data.status_code != 200:
@@ -99,7 +101,7 @@ def get_vac():
         else:
             def get_links(text):
                 data = requests.get(
-                    url=f"https://hh.ru/search/vacancy?text={text}&ored_clusters=true&area=1&page=0",
+                    url=f"https://hh.ru/search/vacancy?text={text}&ored_clusters=true&only_with_salary={owsal}&area=1&page=0",
                     headers={"user-agent": ua.random}
                 )
                 if data.status_code != 200:
@@ -113,7 +115,7 @@ def get_vac():
                 for page in range(page_count):
                     try:
                         data = requests.get(
-                            url=f"https://hh.ru/search/vacancy?text={text}&ored_clusters=true&area=1&page={page}",
+                            url=f"https://hh.ru/search/vacancy?text={text}&ored_clusters=true&only_with_salary={owsal}&area=1&page={page}",
                             headers={"user-agent": ua.random}
                         )
                         if data.status_code != 200:
@@ -162,20 +164,20 @@ def get_vac():
                    json.dump(list, file, indent=4, ensure_ascii=False)
     l5['text']='done'
 
-
+ent = Entry(root)
 l1=Label(root, text="name")
 l2=Label(root, text="salary")
 l3=Label(root, bg='black', fg='white')
 l4=Label(root, bg='black', fg='white')
 l5=Label(root, bg='black', fg='white')
-ent = Entry(root)
+l6=Label(root)
 btn1 = Button(root, text='Name_vacancy', command=get_name)
 btn2 = Button(root, text='Salary', command=get_salary)
 btn3 = Button(root, text='Start', command=get_vac)
 
 var_chk = IntVar()
-rd1 = Radiobutton(root, text="salary", variable=var_chk, value=1)
-rd2 = Radiobutton(root, text="no salary", variable=var_chk, value=2)
+rd1 = Radiobutton(root, text="salary", variable=var_chk, value=1, command=owsalT)
+rd2 = Radiobutton(root, text="no salary", variable=var_chk, value=2, command=owsalF)
 
 l1.grid(row=1)
 l2.grid(row=2)
@@ -191,6 +193,7 @@ btn3.grid(row=2, column=3)
 
 text = l3.cget('text')
 salar = l4.cget('text')
+owsal = l6.cget('text')
 
 
 
